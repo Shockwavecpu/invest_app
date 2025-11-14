@@ -1,0 +1,42 @@
+<h2>Welcome, {{ username }}</h2>
+<p><strong>Balance:</strong> ${{ balance }}</p>
+<p><strong>Earnings:</strong> ${{ earnings }}</p>
+<p><strong>Daily Profit:</strong> ${{ daily }}</p>
+
+<p>
+    <a href="/recharge">Recharge</a> |
+    <a href="/withdraw">Withdraw</a> |
+    <a href="/logout">Logout</a>
+</p>
+
+<h3>Your Withdrawals</h3>
+<table border="1">
+<tr>
+    <th>ID</th>
+    <th>Amount</th>
+    <th>Status</th>
+</tr>
+{% for w in withdrawals %}
+<tr>
+    <td>{{ w.id }}</td>
+    <td>${{ w.amount }}</td>
+    <td>{{ w.status }}</td>
+</tr>
+{% endfor %}
+</table>
+
+<h3>Your Recharges</h3>
+<table border="1">
+<tr>
+    <th>ID</th>
+    <th>Amount</th>
+    <th>Status</th>
+</tr>
+{% for r in recharges %}
+<tr>
+    <td>{{ r.id }}</td>
+    <td>${{ r.amount }}</td>
+    <td>{{ r.status }}</td>
+</tr>
+{% endfor %}
+</table>

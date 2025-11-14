@@ -1,0 +1,14 @@
+<h2>Withdraw</h2>
+<form method="POST">
+  Amount: <input name="amount" type="number" step="0.01"><br>
+  <button type="submit">Submit</button>
+</form>
+
+<h3>Previous Withdrawals:</h3>
+<ul>
+{% for w in withdrawals %}
+  <li>${{ w.amount }} - {{ w.status }}</li>
+{% endfor %}
+</ul>
+
+<a href="/dashboard">Back</a>

@@ -1,0 +1,28 @@
+<h2>All Withdrawal Requests</h2>
+<p><a href="/admin/dashboard">Back to Dashboard</a></p>
+
+<table border="1">
+  <tr>
+    <th>ID</th>
+    <th>User</th>
+    <th>Amount</th>
+    <th>Status</th>
+    <th>Actions</th>
+  </tr>
+  {% for w in withdrawals %}
+  <tr>
+    <td>{{ w.id }}</td>
+    <td>{{ w.user.username }}</td>
+    <td>${{ w.amount }}</td>
+    <td>{{ w.status }}</td>
+    <td>
+      {% if w.status == "pending" %}
+      <a href="/admin/withdrawal/approve/{{ w.id }}">Approve</a> |
+      <a href="/admin/withdrawal/reject/{{ w.id }}">Reject</a>
+      {% else %}
+      No actions
+      {% endif %}
+    </td>
+  </tr>
+  {% endfor %}
+</table>
