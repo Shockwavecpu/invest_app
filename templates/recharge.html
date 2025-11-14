@@ -1,10 +1,104 @@
-<h2>Recharge Balance</h2>
-<p>User: {{ user }}</p>
-<p>Current Balance: ${{ balance }}</p>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Recharge Account - Invest App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f2f5;
+            margin: 0;
+            padding: 0;
+        }
 
-<form method="POST">
-  Amount to Recharge: <input type="number" step="0.01" name="amount" required><br><br>
-  <button type="submit">Submit Recharge Request</button>
-</form>
+        .container {
+            max-width: 500px;
+            margin: 50px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+        }
 
-<a href="/dashboard">Back to Dashboard</a>
+        h2 {
+            color: #007bff;
+            text-align: center;
+        }
+
+        .info-box {
+            background: #e9f2ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .info-box p {
+            margin: 5px 0;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input[type="number"] {
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            padding: 12px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .back-link {
+            display: block;
+            margin-top: 20px;
+            text-align: center;
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Recharge Your Account</h2>
+
+    <div class="info-box">
+        <p><strong>Send Money To:</strong> Kalulu Banda</p>
+        <p><strong>Phone Number:</strong> 0777777777</p>
+        <p>After sending, enter the amount you sent below.</p>
+    </div>
+
+    <form method="POST" action="/recharge">
+        <label for="amount">Amount (k):</label>
+        <input type="number" id="amount" name="amount" min="1" required>
+
+        <button type="submit">Submit Recharge</button>
+    </form>
+
+    <a class="back-link" href="/dashboard">Back to Dashboard</a>
+</div>
+
+</body>
+</html>

@@ -1,28 +1,102 @@
-<h2>All Withdrawal Requests</h2>
-<p><a href="/admin/dashboard">Back to Dashboard</a></p>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin - Withdrawals</title>
+    <style>
+        body {
+            font-family: Arial;
+            background: #f0f2f5;
+            padding: 20px;
+        }
 
-<table border="1">
-  <tr>
-    <th>ID</th>
-    <th>User</th>
-    <th>Amount</th>
-    <th>Status</th>
-    <th>Actions</th>
-  </tr>
-  {% for w in withdrawals %}
-  <tr>
-    <td>{{ w.id }}</td>
-    <td>{{ w.user.username }}</td>
-    <td>${{ w.amount }}</td>
-    <td>{{ w.status }}</td>
-    <td>
-      {% if w.status == "pending" %}
-      <a href="/admin/withdrawal/approve/{{ w.id }}">Approve</a> |
-      <a href="/admin/withdrawal/reject/{{ w.id }}">Reject</a>
-      {% else %}
-      No actions
-      {% endif %}
-    </td>
-  </tr>
-  {% endfor %}
+        h2 {
+            margin-bottom: 10px;
+        }
+
+        a {
+            text-decoration: none;
+            color: #007bff;
+            margin-right: 15px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background: #007bff;
+            color: white;
+        }
+
+        .btn-approve {
+            background: #28a745;
+            padding: 5px 10px;
+            color: white;
+            border-radius: 5px;
+        }
+
+        .btn-reject {
+            background: #dc3545;
+            padding: 5px 10px;
+            color: white;
+            border-radius: 5px;
+        }
+
+        .disabled {
+            background: gray !important;
+            pointer-events: none;
+            opacity: 0.6;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Pending Withdrawals</h2>
+
+<p>
+    <a href="/admin/dashboard">Dashboard</a>
+    <a href="/admin/users">Users</a>
+    <a href="/admin/recharges">Recharges</a>
+    <a href="/admin/logout">Logout</a>
+</p>
+
+<table>
+    <tr>
+        <th>ID</th>
+        <th>User ID</th>
+        <th>Amount</th>
+        <th>Status</th>
+        <th>Actions</th>
+    </tr>
+
+    {% for w in withdrawals %}
+    <tr>
+        <td>{{ w.id }}</td>
+        <td>{{ w.user_id }}</td>
+        <td>${{ w.amount }}</td>
+        <td>{{ w.status }}</td>
+        <td>
+
+            {% if w.status == 'Pending' %}
+                <a href="/admin/withdraw/approve/{{ w.id }}" class="btn-approve">Approve</a>
+                <a href="/admin/withdraw/reject/{{ w.id }}" class="btn-reject">Reject</a>
+            {% else %}
+                <span class="disabled">Completed</span>
+            {% endif %}
+
+        </td>
+    </tr>
+    {% endfor %}
 </table>
+
+</body>
+</html>

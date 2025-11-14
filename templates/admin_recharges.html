@@ -1,29 +1,117 @@
-<h2>All User Recharges</h2>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin - Manage Recharges</title>
+    <style>
+        body {
+            font-family: Arial;
+            background: #f0f2f5;
+            padding: 20px;
+        }
 
-<table border="1">
-<tr>
-    <th>ID</th>
-    <th>User</th>
-    <th>Amount</th>
-    <th>Status</th>
-    <th>Actions</th>
-</tr>
-{% for r in recharges %}
-<tr>
-    <td>{{ r.id }}</td>
-    <td>{{ r.user.username }}</td>
-    <td>${{ r.amount }}</td>
-    <td>{{ r.status }}</td>
-    <td>
-        {% if r.status == "Pending" %}
-            <a href="/admin/approve_recharge/{{ r.id }}">Approve</a> |
-            <a href="/admin/reject_recharge/{{ r.id }}">Reject</a>
-        {% else %}
-            No actions
-        {% endif %}
-    </td>
-</tr>
-{% endfor %}
+        h2 {
+            margin-bottom: 10px;
+        }
+
+        a {
+            text-decoration: none;
+            color: #007bff;
+            margin-right: 15px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background: #007bff;
+            color: white;
+        }
+
+        .btn-approve {
+            background: #28a745;
+            padding: 5px 10px;
+            color: white;
+            border-radius: 5px;
+        }
+
+        .btn-reject {
+            background: #dc3545;
+            padding: 5px 10px;
+            color: white;
+            border-radius: 5px;
+        }
+
+        .status-approved {
+            color: green;
+            font-weight: bold;
+        }
+
+        .status-pending {
+            color: orange;
+            font-weight: bold;
+        }
+
+        .status-rejected {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Manage Recharges</h2>
+
+<p>
+    <a href="/admin/dashboard">Dashboard</a>
+    <a href="/admin/users">Users</a>
+    <a href="/admin/withdrawals">Withdrawals</a>
+    <a href="/admin/logout">Logout</a>
+</p>
+
+<table>
+    <tr>
+        <th>ID</th>
+        <th>User</th>
+        <th>Amount</th>
+        <th>Status</th>
+        <th>Action</th>
+    </tr>
+
+    {% for r in recharges %}
+    <tr>
+        <td>{{ r.id }}</td>
+        <td>{{ r.user.username }}</td>
+        <td>${{ r.amount }}</td>
+        <td>
+            {% if r.status == "Approved" %}
+                <span class="status-approved">Approved</span>
+            {% elif r.status == "Rejected" %}
+                <span class="status-rejected">Rejected</span>
+            {% else %}
+                <span class="status-pending">Pending</span>
+            {% endif %}
+        </td>
+        <td>
+            {% if r.status == "Pending" %}
+                <a class="btn-approve" href="/admin/recharge/approve/{{ r.id }}">Approve</a>
+                <a class="btn-reject" href="/admin/recharge/reject/{{ r.id }}">Reject</a>
+            {% else %}
+                ---
+            {% endif %}
+        </td>
+    </tr>
+    {% endfor %}
 </table>
 
-<a href="/admin/dashboard">Back to Dashboard</a>
+</body>
+</html>

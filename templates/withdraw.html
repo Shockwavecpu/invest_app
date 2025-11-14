@@ -1,14 +1,70 @@
-<h2>Withdraw</h2>
-<form method="POST">
-  Amount: <input name="amount" type="number" step="0.01"><br>
-  <button type="submit">Submit</button>
-</form>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Withdraw</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #f8f9fa; }
+        .withdraw-container { max-width: 600px; margin: 50px auto; padding: 30px; background: #fff; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        h2 { text-align: center; margin-bottom: 20px; }
+        table { margin-top: 20px; }
+    </style>
+</head>
+<body>
 
-<h3>Previous Withdrawals:</h3>
-<ul>
-{% for w in withdrawals %}
-  <li>${{ w.amount }} - {{ w.status }}</li>
-{% endfor %}
-</ul>
+<div class="withdraw-container">
+    <h2>Withdraw Funds</h2>
 
-<a href="/dashboard">Back</a>
+    <!-- Flash messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+              {{ message }}
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <p><strong>Current Balance:</strong> ${{ balance }}</p>
+
+    <!-- Withdraw Form -->
+    <form method="POST" action="/withdraw">
+        <div class="mb-3">
+            <label for="amount" class="form-label">Amount to Withdraw</label>
+            <input type="number" step="0.01" min="0" name="amount" class="form-control" id="amount" required>
+        </div>
+        <button type="submit" class="btn btn-primary w-100">Submit Withdrawal</button>
+    </form>
+
+    <!-- Withdrawal History Table -->
+    <h3 class="mt-4">Your Withdrawal History</h3>
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Amount</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for w in withdrawals %}
+            <tr>
+                <td>{{ w.id }}</td>
+                <td>${{ w.amount }}</td>
+                <td>{{ w.status }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <p class="text-center mt-3"><a href="/dashboard">Back to Dashboard</a></p>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

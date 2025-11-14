@@ -3,134 +3,154 @@
 <head>
     <meta charset="UTF-8">
     <title>Admin Dashboard</title>
-    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #f8f9fa; }
+        .card { margin-bottom: 20px; }
+        .table th, .table td { vertical-align: middle; }
+        .badge-pending { background-color: #ffc107; }
+        .badge-approved { background-color: #28a745; }
+        .badge-rejected { background-color: #dc3545; }
+    </style>
 </head>
 <body>
-<!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
-    <div class="container">
-        <a class="navbar-brand" href="/admin/dashboard">Admin Dashboard</a>
-        <div class="collapse navbar-collapse">
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item"><a class="nav-link" href="/admin/recharges">Recharges</a></li>
-                <li class="nav-item"><a class="nav-link" href="/admin/withdrawals">Withdrawals</a></li>
-                <li class="nav-item"><a class="nav-link" href="/logout">Logout</a></li>
-            </ul>
+<div class="container mt-5">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Admin Dashboard</h2>
+        <p>
+            <a href="/admin/withdrawals" class="btn btn-outline-primary btn-sm">View Withdrawals</a>
+            <a href="/logout" class="btn btn-outline-secondary btn-sm">Logout</a>
+        </p>
+    </div>
+
+    <!-- Users Card -->
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            Users
+        </div>
+        <div class="card-body p-0">
+            <table class="table table-striped mb-0">
+                <thead class="table-light">
+                <tr>
+                    <th>ID</th>
+                    <th>Username</th>
+                    <th>Balance</th>
+                    <th>Earnings</th>
+                    <th>Daily Profit</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for user in users %}
+                <tr>
+                    <td>{{ user.id }}</td>
+                    <td>{{ user.username }}</td>
+                    <td>${{ user.balance }}</td>
+                    <td>${{ user.earnings }}</td>
+                    <td>${{ user.daily_profit }}</td>
+                    <td>
+                        <form action="/admin/user/reset_password/{{ user.id }}" method="POST" class="d-flex align-items-center mb-1">
+                            <input type="password" name="new_password" placeholder="New password" class="form-control form-control-sm me-1" required>
+                            <button type="submit" class="btn btn-warning btn-sm">Reset</button>
+                        </form>
+                        <a href="/admin/user/delete/{{ user.id }}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
         </div>
     </div>
-</nav>
 
-<div class="container">
+    <!-- Withdrawals Card -->
+    <div class="card shadow-sm">
+        <div class="card-header bg-success text-white">
+            Withdrawals
+        </div>
+        <div class="card-body p-0">
+            <table class="table table-striped mb-0">
+                <thead class="table-light">
+                <tr>
+                    <th>ID</th>
+                    <th>User</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for w in withdrawals %}
+                <tr>
+                    <td>{{ w.id }}</td>
+                    <td>{{ w.user.username }}</td>
+                    <td>${{ w.amount }}</td>
+                    <td>
+                        {% if w.status == "Pending" %}
+                            <span class="badge badge-pending">{{ w.status }}</span>
+                        {% elif w.status == "Approved" %}
+                            <span class="badge badge-approved">{{ w.status }}</span>
+                        {% else %}
+                            <span class="badge badge-rejected">{{ w.status }}</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if w.status == "Pending" %}
+                        <a href="/admin/approve/{{ w.id }}" class="btn btn-success btn-sm">Approve</a>
+                        <a href="/admin/reject/{{ w.id }}" class="btn btn-danger btn-sm">Reject</a>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 
-    <!-- Flash messages -->
-    {% with messages = get_flashed_messages(with_categories=true) %}
-      {% if messages %}
-        {% for category, message in messages %}
-          <div class="alert alert-{{ 'success' if category=='success' else 'danger' }} alert-dismissible fade show" role="alert">
-            {{ message }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-          </div>
-        {% endfor %}
-      {% endif %}
-    {% endwith %}
-
-    <!-- Users Table -->
-    <h3 class="mb-3">Users</h3>
-    <table class="table table-striped table-hover">
-        <thead class="table-dark">
-        <tr>
-            <th>ID</th>
-            <th>Username</th>
-            <th>Balance</th>
-            <th>Actions</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for u in users %}
-            <tr>
-                <td>{{ u.id }}</td>
-                <td>{{ u.username }}</td>
-                <td>${{ u.balance }}</td>
-                <td>
-                    <form action="/admin/user/reset_password/{{ u.id }}" method="POST" class="d-inline">
-                        <input type="text" name="new_password" placeholder="New password" class="form-control form-control-sm" required>
-                        <button class="btn btn-sm btn-primary mt-1" type="submit">Reset</button>
-                    </form>
-                    <a href="/admin/user/delete/{{ u.id }}" class="btn btn-sm btn-danger mt-1" onclick="return confirm('Delete user?')">Delete</a>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-    <!-- Withdrawals Table -->
-    <h3 class="mt-5 mb-3">Withdrawals</h3>
-    <table class="table table-striped table-hover">
-        <thead class="table-dark">
-        <tr>
-            <th>ID</th>
-            <th>User</th>
-            <th>Amount</th>
-            <th>Status</th>
-            <th>Actions</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for w in withdrawals %}
-            <tr>
-                <td>{{ w.id }}</td>
-                <td>{{ w.user.username }}</td>
-                <td>${{ w.amount }}</td>
-                <td>{{ w.status }}</td>
-                <td>
-                    {% if w.status == "Pending" %}
-                        <a href="/admin/approve/{{ w.id }}" class="btn btn-sm btn-success">Approve</a>
-                        <a href="/admin/reject/{{ w.id }}" class="btn btn-sm btn-danger">Reject</a>
-                    {% else %}
-                        <span class="text-muted">No actions</span>
-                    {% endif %}
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-    <!-- Recharges Table -->
-    <h3 class="mt-5 mb-3">Recharges</h3>
-    <table class="table table-striped table-hover">
-        <thead class="table-dark">
-        <tr>
-            <th>ID</th>
-            <th>User</th>
-            <th>Amount</th>
-            <th>Status</th>
-            <th>Actions</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for r in recharges %}
-            <tr>
-                <td>{{ r.id }}</td>
-                <td>{{ r.user.username }}</td>
-                <td>${{ r.amount }}</td>
-                <td>{{ r.status }}</td>
-                <td>
-                    {% if r.status == "Pending" %}
-                        <a href="/admin/approve_recharge/{{ r.id }}" class="btn btn-sm btn-success">Approve</a>
-                        <a href="/admin/reject_recharge/{{ r.id }}" class="btn btn-sm btn-danger">Reject</a>
-                    {% else %}
-                        <span class="text-muted">No actions</span>
-                    {% endif %}
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    <!-- Recharges Card -->
+    <div class="card shadow-sm">
+        <div class="card-header bg-info text-white">
+            Recharges
+        </div>
+        <div class="card-body p-0">
+            <table class="table table-striped mb-0">
+                <thead class="table-light">
+                <tr>
+                    <th>ID</th>
+                    <th>User</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for r in recharges %}
+                <tr>
+                    <td>{{ r.id }}</td>
+                    <td>{{ r.user.username }}</td>
+                    <td>${{ r.amount }}</td>
+                    <td>
+                        {% if r.status == "Pending" %}
+                            <span class="badge badge-pending">{{ r.status }}</span>
+                        {% elif r.status == "Approved" %}
+                            <span class="badge badge-approved">{{ r.status }}</span>
+                        {% else %}
+                            <span class="badge badge-rejected">{{ r.status }}</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if r.status == "Pending" %}
+                        <a href="/admin/approve_recharge/{{ r.id }}" class="btn btn-success btn-sm">Approve</a>
+                        <a href="/admin/reject_recharge/{{ r.id }}" class="btn btn-danger btn-sm">Reject</a>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 
 </div>
-
-<!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
