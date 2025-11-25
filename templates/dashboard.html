@@ -1,163 +1,247 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>User Dashboard - Invest App</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f0f2f5;
-            margin: 0;
-            padding: 0;
-        }
+<meta charset="UTF-8">
+<title>User Dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        .container {
-            max-width: 900px;
-            margin: 30px auto;
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.2);
-        }
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-        h2 {
-            color: #007bff;
-        }
+<style>
+  body {
+    background: #f4f6fa;
+    font-family: Arial, sans-serif;
+    margin: 0;
+  }
 
-        .stats {
-            display: flex;
-            gap: 20px;
-            margin: 20px 0;
-        }
+  /* HEADER */
+  .header {
+    background: #ed1c24;
+    color: #fff;
+    padding: 24px 16px 12px 16px;
+  }
+  .header .logo {
+    font-weight: bold;
+    font-size: 1.6rem;
+  }
 
-        .stat-box {
-            flex: 1;
-            background: #e9f2ff;
-            padding: 15px;
-            border-radius: 10px;
-            text-align: center;
-        }
+  /* MAIN CARD */
+  .main-card {
+    background: #fff;
+    margin: -32px 8px 16px 8px;
+    border-radius: 16px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    padding: 20px 16px 10px 16px;
+  }
 
-        .stat-box h3 {
-            margin: 0;
-            color: #0056b3;
-        }
+  .user-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
 
-        .buttons {
-            margin: 20px 0;
-        }
+  /* BALANCE CARDS */
+  .balance-section {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 10px;
+  }
+  .balance-card {
+    flex: 1;
+    border-right: 1px solid #ddd;
+    text-align: center;
+    padding: 0 5px;
+  }
+  .balance-card:last-child {
+    border-right: none;
+  }
+  .balance-label {
+    color: #ed1c24;
+    font-weight: bold;
+    font-size: 1.1rem;
+  }
 
-        a.button {
-            display: inline-block;
-            margin-right: 10px;
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            transition: 0.3s;
-        }
+  /* ACTION BUTTONS */
+  .actions {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+  .action-btn {
+    flex: 1;
+    background: #ed1c24;
+    color: #fff;
+    border: none;
+    padding: 10px 2px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1rem;
+    text-align: center;
+    text-decoration: none;
+    display: block;
+  }
 
-        a.button:hover {
-            background-color: #0056b3;
-        }
+  /* DAILY EARNINGS STYLE */
+  .money-section {
+    background: #ffecec;
+    padding: 11px;
+    border-radius: 8px;
+    margin-bottom: 7px;
+  }
+  .money-label {
+    color: #ed1c24;
+    font-weight: bold;
+    font-size: 1.05rem;
+  }
 
-        .invite {
-            background: #e9f2ff;
-            padding: 15px;
-            border-radius: 5px;
-            margin: 20px 0;
-        }
+  /* TABLE WRAPPER */
+  .section-card {
+    background: #fff;
+    border-radius: 16px;
+    margin: 0 8px 16px 8px;
+    padding: 16px 10px;
+    box-shadow: 0 1px 5px rgba(0,0,0,0.03);
+  }
 
-        .section-title {
-            margin-top: 30px;
-            margin-bottom: 10px;
-            color: #007bff;
-        }
+  .section-title {
+    font-weight: bold;
+    margin-bottom: 12px;
+    font-size: 1.1rem;
+  }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 30px;
-        }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  th, td {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    text-align: center;
+  }
 
-        table, th, td {
-            border: 1px solid #ccc;
-        }
-
-        th, td {
-            padding: 10px;
-            text-align: center;
-        }
-    </style>
+  /* FOOTER NAV */
+  .footer-nav {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background: #fff;
+    border-top: 1px solid #eee;
+    display: flex;
+    justify-content: space-around;
+    padding: 9px 0;
+  }
+  .footer-nav a {
+    color: #ed1c24;
+    text-decoration: none;
+    font-size: 1.05rem;
+    text-align: center;
+  }
+</style>
 </head>
 <body>
 
-<div class="container">
-    <h2>Welcome, {{ username }}</h2>
+  <!-- HEADER -->
+  <div class="header">
+    <span class="logo"><i class="fas fa-wallet"></i> Dashboard</span>
+    <span style="float:right;"><i class="fas fa-bell"></i></span>
+  </div>
 
-    <div class="stats">
-        <div class="stat-box">
-            <h3>Balance</h3>
-            <p>${{ balance }}</p>
-        </div>
-        <div class="stat-box">
-            <h3>Earnings</h3>
-            <p>${{ earnings }}</p>
-        </div>
-        <div class="stat-box">
-            <h3>Daily Profit</h3>
-            <p>${{ daily }}</p>
-        </div>
+  <!-- MAIN CARD -->
+  <div class="main-card">
+    <div class="user-info">
+      <div>
+        Welcome, <b>{{ username }}</b>
+      </div>
+      <a href="/logout" style="color:#ed1c24;font-size:0.90rem;">Logout</a>
     </div>
 
-    <div class="buttons">
-        <a class="button" href="/recharge">Recharge</a>
-        <a class="button" href="/withdraw">Withdraw</a>
-        <a class="button" href="/logout">Logout</a>
+    <!-- BALANCE DISPLAY -->
+    <div class="balance-section">
+      <div class="balance-card">
+        <div class="balance-label">${{ balance }}</div>
+        <div style="font-size:0.85em;color:#ed1c24">Balance</div>
+      </div>
+      <div class="balance-card">
+        <div class="balance-label">${{ earnings }}</div>
+        <div style="font-size:0.85em;">Total Earnings</div>
+      </div>
+      <div class="balance-card">
+        <div class="balance-label">${{ daily }}</div>
+        <div style="font-size:0.85em;">Daily Profit</div>
+      </div>
     </div>
 
-    <div class="invite">
-        <h3>Your Invitation Link</h3>
-        <p>
-            Share this link to invite others:<br>
-            <a href="{{ request.host_url }}register?invite={{ user.invitation_code }}" target="_blank">
-                {{ request.host_url }}register?invite={{ user.invitation_code }}
-            </a>
-        </p>
+    <!-- ACTION BUTTONS -->
+    <div class="actions">
+      <a class="action-btn" href="/recharge">Recharge</a>
+      <a class="action-btn" href="/withdraw">Withdraw</a>
     </div>
 
-    <h3 class="section-title">Your Withdrawals</h3>
+    <!-- DAILY PROFIT STYLE SECTION -->
+    <div class="money-section">
+      <span class="money-label"><i class="fas fa-chart-line"></i> Today's Earnings</span>
+      <span style="float:right; color:#ed1c24;">${{ daily }}</span><br>
+      <span style="font-size:0.85em;color:gray;">Auto-updated daily</span>
+    </div>
+  </div>
+
+  <!-- INVITE LINK -->
+  <div class="section-card">
+    <div class="section-title">Invitation Link</div>
+    <p>
+      Share this link:<br>
+      <a href="{{ request.host_url }}register?invite={{ user.invitation_code }}">
+        {{ request.host_url }}register?invite={{ user.invitation_code }}
+      </a>
+    </p>
+  </div>
+
+  <!-- WITHDRAWALS -->
+  <div class="section-card">
+    <div class="section-title">Your Withdrawals</div>
     <table>
-        <tr>
-            <th>ID</th>
-            <th>Amount</th>
-            <th>Status</th>
-        </tr>
-        {% for w in withdrawals %}
-        <tr>
-            <td>{{ w.id }}</td>
-            <td>${{ w.amount }}</td>
-            <td>{{ w.status }}</td>
-        </tr>
-        {% endfor %}
+      <tr>
+        <th>ID</th>
+        <th>Amount</th>
+        <th>Status</th>
+      </tr>
+      {% for w in withdrawals %}
+      <tr>
+        <td>{{ w.id }}</td>
+        <td>${{ w.amount }}</td>
+        <td>{{ w.status }}</td>
+      </tr>
+      {% endfor %}
     </table>
+  </div>
 
-    <h3 class="section-title">Your Recharges</h3>
+  <!-- RECHARGES -->
+  <div class="section-card">
+    <div class="section-title">Your Recharges</div>
     <table>
-        <tr>
-            <th>ID</th>
-            <th>Amount</th>
-            <th>Status</th>
-        </tr>
-        {% for r in recharges %}
-        <tr>
-            <td>{{ r.id }}</td>
-            <td>${{ r.amount }}</td>
-            <td>{{ r.status }}</td>
-        </tr>
-        {% endfor %}
+      <tr>
+        <th>ID</th>
+        <th>Amount</th>
+        <th>Status</th>
+      </tr>
+      {% for r in recharges %}
+      <tr>
+        <td>{{ r.id }}</td>
+        <td>${{ r.amount }}</td>
+        <td>{{ r.status }}</td>
+      </tr>
+      {% endfor %}
     </table>
-</div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer-nav">
+    <a href="/dashboard"><i class="fas fa-home"></i><br>Home</a>
+    <a href="/recharge"><i class="fas fa-plus-circle"></i><br>Recharge</a>
+    <a href="/withdraw"><i class="fas fa-money-bill"></i><br>Withdraw</a>
+    <a href="/products"><i class="fas fa-store"></i><br>Products</a>
+  </div>
 
 </body>
 </html>

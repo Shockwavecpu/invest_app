@@ -45,7 +45,7 @@
             font-weight: bold;
         }
 
-        input[type="number"] {
+        input[type="text"], input[type="number"] {
             padding: 10px;
             margin-bottom: 20px;
             border-radius: 5px;
@@ -85,14 +85,17 @@
     <h2>Recharge Your Account</h2>
 
     <div class="info-box">
-        <p><strong>Send Money To:</strong> Kalulu Banda</p>
-        <p><strong>Phone Number:</strong> 0777777777</p>
+        <p><strong>Send Money To:</strong> {{ admin_name }}</p>
+        <p><strong>Phone Number:</strong> {{ contact_number }}</p>
         <p>After sending, enter the amount you sent below.</p>
     </div>
 
     <form method="POST" action="/recharge">
-        <label for="amount">Amount (k):</label>
-        <input type="number" id="amount" name="amount" min="1" required>
+        <label>Wallet Number (for withdrawals):</label>
+        <input type="text" name="wallet_number" value="{{ wallet_number or '' }}" required>
+
+        <label>Amount:</label>
+        <input type="number" name="amount" step="0.01" required>
 
         <button type="submit">Submit Recharge</button>
     </form>
