@@ -7,28 +7,38 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body { background-color: #f8f9fa; }
-        .withdraw-container { max-width: 600px; margin: 50px auto; padding: 30px; background: #fff; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-        h2 { text-align: center; margin-bottom: 20px; }
+        body { background-color: #f4f6fa; }
+        .withdraw-container { 
+            max-width: 600px; 
+            margin: 50px auto; 
+            padding: 30px; 
+            background: #fff; 
+            border-radius: 12px; 
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15); 
+        }
+        h2 { 
+            text-align: center; 
+            margin-bottom: 25px; 
+            color: #ed1c24; /* updated to match dashboard */
+        }
         table { margin-top: 20px; }
+        .btn-primary { 
+            background-color: #ed1c24; /* updated button color */
+            border-color: #ed1c24; 
+        }
+        .btn-primary:hover { 
+            background-color: #c2171f; 
+            border-color: #c2171f; 
+        }
+        a { color: #ed1c24; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        .alert { border-radius: 8px; }
     </style>
 </head>
 <body>
 
 <div class="withdraw-container">
     <h2>Withdraw Funds</h2>
-
-    <!-- Flash messages -->
-    {% with messages = get_flashed_messages(with_categories=true) %}
-      {% if messages %}
-        {% for category, message in messages %}
-          <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
-              {{ message }}
-              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-          </div>
-        {% endfor %}
-      {% endif %}
-    {% endwith %}
 
     <p><strong>Current Balance:</strong> ${{ balance }}</p>
 
@@ -42,9 +52,9 @@
     </form>
 
     <!-- Withdrawal History Table -->
-    <h3 class="mt-4">Your Withdrawal History</h3>
+    <h3 class="mt-4" style="color:#ed1c24;">Your Withdrawal History</h3>
     <table class="table table-striped table-bordered">
-        <thead>
+        <thead class="table-light">
             <tr>
                 <th>ID</th>
                 <th>Amount</th>
